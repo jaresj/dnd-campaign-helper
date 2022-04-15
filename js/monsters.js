@@ -1,14 +1,10 @@
 //Example fetch using DnD5eAPI - place subclasses in ul
 document.querySelector('button').addEventListener('click', getFetch);
 
-// function init() {
-//   document.querySelector('#spellClass').innerHTML = '';
-//   document.querySelector('#spellSubclass').innerHTML = '';
-// }
-
 function getFetch() {
   //   init();
-  const choice = document.querySelector('input').value.toLowerCase();
+  let choice = document.querySelector('input').value.toLowerCase();
+  choice = choice.split(' ').join('-');
   const url = `https://www.dnd5eapi.co/api/monsters/${choice}`;
 
   fetch(url)

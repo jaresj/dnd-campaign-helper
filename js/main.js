@@ -8,7 +8,8 @@ function init() {
 
 function getFetch() {
   init();
-  const choice = document.querySelector('input').value.toLowerCase();
+  let choice = document.querySelector('input').value.toLowerCase();
+  choice = choice.split(' ').join('-');
   const url = `https://www.dnd5eapi.co/api/spells/${choice}`;
 
   fetch(url)
