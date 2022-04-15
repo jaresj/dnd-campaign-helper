@@ -10,7 +10,6 @@ function getFetch() {
   fetch(url)
     .then((res) => res.json()) // parse response as JSON
     .then((data) => {
-      console.log(data);
       // NAME
       document.querySelector('h2').innerText = `Name: ${data.name}`;
       // HIT POINTS
