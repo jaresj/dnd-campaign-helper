@@ -1,47 +1,51 @@
-//Example fetch using DnD5eAPI - place subclasses in ul
+//Get the deck
+let deckId = '';
+
+fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
+  .then((res) => res.json()) // parse response as JSON
+  .then((data) => {
+    deckId = data.deck_id;
+  })
+  .catch((err) => {
+    console.log(`error ${err}`);
+  });
+
 document.querySelector('button').addEventListener('click', getFetch);
 
-function init() {
-  document.querySelector('#spellClass').innerHTML = '';
-  document.querySelector('#spellSubclass').innerHTML = '';
-}
-
 function getFetch() {
-  init();
-  let choice = document.querySelector('input').value.toLowerCase();
-  choice = choice.split(' ').join('-');
-  const url = `https://www.dnd5eapi.co/api/spells/${choice}`;
+  const url = `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=2`;
 
   fetch(url)
     .then((res) => res.json()) // parse response as JSON
     .then((data) => {
-      // NAME
-      document.querySelector('h2').innerText = `Name: ${data.name}`;
-      // CLASS
-      data.classes.forEach((obj) => {
-        const li = document.createElement('li');
-        li.textContent = obj.name;
-        document.querySelector('#spellClass').appendChild(li);
-      });
-      // SUBCLASS
-      data.subclasses.forEach((obj) => {
-        // Create Li
-        const li = document.createElement('li');
-        // add text to li
-        li.textContent = obj.name;
-        // append the li to the ul
-        document.querySelector('#spellSubclass').appendChild(li);
-      });
-      // DESCRIPTION
-      document.querySelector('p').innerText = data.desc;
-      // DURATION
-      document.querySelector(
-        '#duration'
-      ).innerText = `Duration: ${data.duration}`;
-      // RANGE
-      document.querySelector('#range').innerText = `Range: ${data.range}`;
+      console.log(data);
+      let val1 = Number(cardValue(data.cards[0].value));
+      let val2 = Number(cardValue(data.cards[1].value));
+      document.querySelector('#player1').src = data.cards[0].image;
+      document.querySelector('#player2').src = data.cards[1].image;
+      if (val1 > val2) {
+        document.querySelector('h3').innerText = 'Player 1 WON!';
+      } else if (val1 < val2) {
+        document.querySelector('h3').innerText = 'Player 2 WON!';
+      } else {
+        document.querySelector('h3').innerText = 'WAR!';
+      }
     })
     .catch((err) => {
       console.log(`error ${err}`);
     });
+}
+
+function cardValue(val) {
+  if (val === 'ACE') {
+    return 11;
+  } else if (val === 'KING') {
+    return 10;
+  } else if (val === 'QUEEN') {
+    return 10;
+  } else if (val === 'JACK') {
+    return 10;
+  } else {
+    return val;
+  }
 }
